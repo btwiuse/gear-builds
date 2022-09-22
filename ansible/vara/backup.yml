@@ -26,12 +26,20 @@
         chdir: /home/{{ item.user }}/.local/share/gear-node/chains/vara_network/db
         cmd: 'find full -type f -exec md5sum {} \; > md5.txt'
 
+    - name: Create test dir
+      become: yes
+      loop: '{{ nodes }}'
+      file:
+        path: /home/{{ item.user }}/kvs96/
+        state: directory
+        mode: '0755'
+
     - name: Pack DB
       become: yes
       loop: '{{ nodes }}'
       archive:
         path: /home/{{ item.user }}/.local/share/gear-node/chains/vara_network/db
-        dest: /var/www/{{ inventory_hostname }}/html/{{ item.file_name }}.tar.xz
+        dest: /home/{{ item.user }}/kvs96/{{ item.file_name }}.tar.xz
         format: xz
         force_archive: yes
 
