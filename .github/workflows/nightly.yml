@@ -10,7 +10,15 @@ env:
   NIGHTLY_TOOLCHAIN_VERSION: ${{ secrets.NIGHTLY_TOOLCHAIN_VERSION }}
 
 jobs:
+  qemu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
   build:
+    needs:
+      - qemu
     name: Build release binaries
     strategy:
       fail-fast: false
